@@ -8,6 +8,9 @@ ENV PYTHONUNBUFFERED=1 \
 # (2) 컨테이너 안에서 작업 디렉터리를 /app 으로 설정
 WORKDIR /app
 
+# (2.1) Python 모듈 검색 경로에 backend 폴더 추가
+ENV PYTHONPATH=/app/backend
+
 # (3) requirements.txt 복사 & 설치
 #     → 레포 루트에 있는 requirements.txt 를 그대로 사용
 COPY requirements.txt .
