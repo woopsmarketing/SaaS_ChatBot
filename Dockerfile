@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app/backend
 
 # ② requirements.txt(루트에 있는 거 아닌, backend/requirements.txt)를 복사해서 설치
-COPY backend/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # ③ 나머지 코드 복사
