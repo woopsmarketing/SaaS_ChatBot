@@ -1,23 +1,25 @@
 # ─── 프로젝트 루트/Dockerfile ───
 FROM python:3.11-slim
 
+# (1) 표준 환경 변수
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-# ① 컨테이너 안에서 작업 디렉터리를 /app/backend 로 설정
-WORKDIR /app/backend
+# (2) 컨테이너 안에서 작업 디렉터리를 /app 으로 설정
+WORKDIR /app
 
-# ② requirements.txt(루트에 있는 거 아닌, backend/requirements.txt)를 복사해서 설치
+# (3) requirements.txt 복사 & 설치
+#     → 레포 루트에 있는 requirements.txt 를 그대로 사용
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ③ 나머지 코드 복사
-#    이때 컨텍스트가 루트이므로 frontend/, backend/ 모두 들어오지만
-#    WORKDIR 가 /app/backend 이므로 하위 app/ 모듈이 바로 보입니다.
+# (4) 전체 소스 복사
+#     → /app/backend, /app/frontend, 등 모두 가져옴
 COPY . .
 
-# ④ 포트 열기
+# (5) FastAPI 포트 오픈
 EXPOSE 8000
 
-# ⑤ uvicorn 에서 'app.main' 을 탑레벨 모듈로 인식하도록
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# (6) uvicorn 을 'backend.app.main' 모듈로 실행
+#     → 컨텍스트(/app) 아래에 backend/app/main.py 가 있으므로
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
