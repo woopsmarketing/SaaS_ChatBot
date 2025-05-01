@@ -1,0 +1,20 @@
+<!-- frontend/templates/dashboard.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h2>사이트 대시보드</h2>
+  <ul>
+    {% for s in sites %}
+      <li>
+        ID: {{ s.id }}<br/>
+        SiteKey: <code>{{ s.site_key }}</code><br/>
+        Persona: {{ s.persona_prompt }}<br/>
+        <a href="/site/{{ s.id }}/upload">문서 업로드 & 학습</a>
+      </li>
+    {% else %}
+      <li>등록된 사이트가 없습니다.</li>
+    {% endfor %}
+  </ul>
+
+  <!-- ▼ POST 폼 대신 이 링크를 눌러 GET /site/create 로 이동해요 ▼ -->
+  <a href="/site/create" class="btn">새 사이트 등록</a>
+{% endblock %}

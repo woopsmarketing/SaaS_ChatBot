@@ -1,0 +1,40 @@
+/* backend/widget/chatbox.css */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+#chat-window {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+.msg {
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 8px;
+  max-width: 80%;
+}
+.msg.user {
+  background: #daf1da;
+  align-self: flex-end;
+}
+.msg.bot {
+  background: #f1f0f0;
+  align-self: flex-start;
+}
+#chat-form {
+  display: flex;
+}
+#chat-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 1em;
+}
+#chat-form button {
+  padding: 8px 12px;
+  font-size: 1em;
+}

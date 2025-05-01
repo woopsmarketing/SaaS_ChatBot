@@ -1,0 +1,24 @@
+<!-- frontend/templates/base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin - {{ user.email if user else "로그인" }}</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>My RAGBot SaaS Admin</h1>
+    {% if user %}
+      <p>환영, {{ user.email }}님!</p>
+      <a href="/dashboard">대시보드</a>
+    {% else %}
+      <a href="/login">로그인</a>
+    {% endif %}
+    <hr/>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

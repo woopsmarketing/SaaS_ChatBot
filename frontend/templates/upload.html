@@ -1,0 +1,18 @@
+<!-- frontend/templates/upload.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h2>문서 업로드 (RAG 학습)</h2>
+
+  {# 에러 메시지 출력용 #}
+  {% if error %}
+    <p style="color: red">{{ error }}</p>
+  {% endif %}
+
+  <form action="/site/{{ site.id }}/upload" method="post" enctype="multipart/form-data">
+    <label>텍스트 파일(.txt) 선택:</label><br/>
+    <input type="file" name="file" accept=".txt" required><br/><br/>
+    <button type="submit">업로드 및 학습</button>
+  </form>
+
+  <p><a href="/dashboard">← 대시보드로 돌아가기</a></p>
+{% endblock %}

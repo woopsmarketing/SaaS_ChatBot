@@ -1,0 +1,7 @@
+/* frontend/static/styles.css */
+body { font-family: sans-serif; margin: 20px; }
+header h1 { margin: 0; }
+.error { color: red; }
+form div { margin: 8px 0; }
+button { padding: 6px 12px; }
+code { background: #eee; padding: 2px 4px; }
