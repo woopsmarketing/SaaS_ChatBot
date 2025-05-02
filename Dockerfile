@@ -1,3 +1,4 @@
+ARG CACHEBUST=1
 # ─── 프로젝트 루트/Dockerfile ───
 FROM python:3.11-slim
 

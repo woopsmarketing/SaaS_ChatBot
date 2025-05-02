@@ -11,7 +11,7 @@ class FAISSStore(EmbeddingStore):
     def __init__(
         self,
         embedding_model: str = "text-embedding-ada-002",
-        index_path: str = "indexes/faiss_index",
+        index_path: str = "/app/indexes/faiss_index",
     ):
         os.environ["OPENAI_API_KEY"] = settings.OPENAI_API_KEY
         self.embeddings = OpenAIEmbeddings(model=embedding_model)
