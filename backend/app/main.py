@@ -1,6 +1,7 @@
 # main.py: FastAPI 앱 생성, 라우터 포함, StaticFiles 설정
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routes import auth, site, chat, upload, widget
 from pathlib import Path
@@ -18,6 +19,15 @@ STATIC_DIR = BASE_DIR / "frontend" / "static"
 TEMPLATES_DIR = BASE_DIR / "frontend" / "templates"
 
 app = FastAPI()
+
+# 모든 도메인에 대해 CORS 허용
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ← 여기
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
