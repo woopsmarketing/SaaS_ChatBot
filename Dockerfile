@@ -11,7 +11,7 @@ WORKDIR /app
 
 # (2.1) Python 모듈 검색 경로에 backend 폴더 추가
 ENV PYTHONPATH=/app/backend \
-    DATABASE_URL=sqlite:////app/data/dev.db
+    DATABASE_URL=sqlite:///data/dev.db
 
 # ① 인덱스 폴더를 미리 만들어 두기
 # (A) /app/indexes 폴더를 root 권한으로 생성 & 퍼미션 조정

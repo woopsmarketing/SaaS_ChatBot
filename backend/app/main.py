@@ -7,6 +7,7 @@ from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from app.routes.web import router as web_router
 from app.routes.site import router as site_router
+from app.models import Base, engine
 
 # widget 폴더 (backend/widget) 로드
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -17,6 +18,16 @@ STATIC_DIR = BASE_DIR / "frontend" / "static"
 TEMPLATES_DIR = BASE_DIR / "frontend" / "templates"
 
 app = FastAPI()
+
+
+@app.on_event("startup")
+def create_tables():
+    # settings.DATABASE_URL로 연결된 engine에
+    # Base에 정의된 모든 모델의 테이블을 생성합니다.
+    Base.metadata.create_all(bind=engine)
+    # 첫 실행 시 data/dev.db 에 users, sites, documents ... 테이블이 생깁니다.
+
+
 # ✅ 올바른 절대경로로 마운트
 app.mount("/widget", StaticFiles(directory=str(WIDGET_DIR), html=True), name="widget")
 
@@ -25,6 +36,7 @@ app.mount("/widget", StaticFiles(directory=str(WIDGET_DIR), html=True), name="wi
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
+
 
 # 관리자 웹 라우터를 제일 먼저 등록
 app.include_router(web_router)
