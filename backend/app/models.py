@@ -7,7 +7,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, DateT
 from sqlalchemy.orm import sessionmaker, declarative_base
 from app.config import settings
 from datetime import datetime
-from app.models import Base, engine
+
 
 Base = declarative_base()
 engine = create_engine(settings.DATABASE_URL, connect_args={"check_same_thread": False})
