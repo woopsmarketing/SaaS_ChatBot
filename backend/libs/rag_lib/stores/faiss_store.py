@@ -17,7 +17,7 @@ class FAISSStore(EmbeddingStore):
         self.embeddings = OpenAIEmbeddings(model=embedding_model)
         self.index_path = index_path
         # 1) 인덱스 폴더가 없으면 생성
-        os.makedirs(self.index_path, exist_ok=True)
+        # os.makedirs(self.index_path, exist_ok=True)
         # 기존에 저장된 인덱스 파일이 있는지 체크
         index_file = os.path.join(self.index_path, "index.faiss")
         # try:
