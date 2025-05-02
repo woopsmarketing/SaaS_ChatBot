@@ -13,7 +13,8 @@ ENV PYTHONPATH=/app/backend
 
 
 # ① 인덱스 폴더를 미리 만들어 두기
-RUN mkdir -p /app/indexes
+# (A) /app/indexes 폴더를 root 권한으로 생성 & 퍼미션 조정
+RUN mkdir -p /app/indexes && chmod 777 /app/indexes
 
 
 # (3) requirements.txt 복사 & 설치
