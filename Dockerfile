@@ -11,6 +11,11 @@ WORKDIR /app
 # (2.1) Python 모듈 검색 경로에 backend 폴더 추가
 ENV PYTHONPATH=/app/backend
 
+
+# ① 인덱스 폴더를 미리 만들어 두기
+RUN mkdir -p /app/indexes
+
+
 # (3) requirements.txt 복사 & 설치
 #     → 레포 루트에 있는 requirements.txt 를 그대로 사용
 COPY requirements.txt .
