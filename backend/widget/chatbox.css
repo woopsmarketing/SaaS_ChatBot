@@ -1,16 +1,38 @@
-/* backend/widget/chatbox.css */
-body {
+.chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
   font-family: sans-serif;
-  margin: 0;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
 }
-#chat-window {
+.chat-widget .chat-toggle {
+  width: 50px; height: 50px;
+  background: #007bff;
+  color: #fff;
+  font-size: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.chat-widget .chat-window {
+  display: none;
+  flex-direction: column;
+  width: 300px; height: 400px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.chat-widget.open .chat-window {
+  display: flex;
+}
+.chat-widget .messages {
   flex: 1;
+  padding: 8px;
   overflow-y: auto;
-  margin-bottom: 10px;
 }
 .msg {
   padding: 8px 12px;
@@ -26,15 +48,20 @@ body {
   background: #f1f0f0;
   align-self: flex-start;
 }
-#chat-form {
+.chat-form {
   display: flex;
+  border-top: 1px solid #ddd;
 }
-#chat-input {
+.chat-input {
   flex: 1;
   padding: 8px;
-  font-size: 1em;
+  border: none;
+  outline: none;
 }
-#chat-form button {
-  padding: 8px 12px;
-  font-size: 1em;
+.chat-submit {
+  padding: 0 16px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
