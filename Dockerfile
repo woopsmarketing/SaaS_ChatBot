@@ -33,4 +33,4 @@ EXPOSE 8000
 
 # (6) uvicorn 을 'backend.app.main' 모듈로 실행
 #     → 컨텍스트(/app) 아래에 backend/app/main.py 가 있으므로
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "warning"]
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
