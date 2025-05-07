@@ -8,7 +8,9 @@ from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from app.routes.web import router as web_router
 from app.routes.site import router as site_router
-from app.models import Base, engine
+from app.models import Base, engine, User, Site
+from app.models import SessionLocal
+from app.crud import get_user_by_email
 
 # widget 폴더 (backend/widget) 로드
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -32,10 +34,36 @@ app.add_middleware(
 
 @app.on_event("startup")
 def create_tables():
-    # settings.DATABASE_URL로 연결된 engine에
-    # Base에 정의된 모든 모델의 테이블을 생성합니다.
+    # 1) 테이블 생성
     Base.metadata.create_all(bind=engine)
-    # 첫 실행 시 data/dev.db 에 users, sites, documents ... 테이블이 생깁니다.
+
+    # 2) 기본 계정/사이트 시딩
+    db = SessionLocal()
+    try:
+        # --- 기본 관리자 계정 ---
+        admin = get_user_by_email(db, settings.DEFAULT_ADMIN_EMAIL)
+        if not admin:
+            from app.crud import create_user  # your 기존 crud 함수 재사용
+
+            admin = create_user(
+                db,
+                email=settings.DEFAULT_ADMIN_EMAIL,
+                password=settings.DEFAULT_ADMIN_PASSWORD,  # 내부에서 해시 처리
+            )
+            print(f"시딩: 기본 관리자 '{settings.DEFAULT_ADMIN_EMAIL}' 생성")
+
+        # --- 기본 사이트 (site_key) ---
+        if not db.query(Site).filter_by(site_key=settings.DEFAULT_SITE_KEY).first():
+            default_site = Site(
+                name="Default Site",
+                site_key=settings.DEFAULT_SITE_KEY,
+                owner_id=admin.id,
+            )
+            db.add(default_site)
+            db.commit()
+            print(f"시딩: 기본 사이트 '{settings.DEFAULT_SITE_KEY}' 생성")
+    finally:
+        db.close()
 
 
 # ✅ 올바른 절대경로로 마운트
