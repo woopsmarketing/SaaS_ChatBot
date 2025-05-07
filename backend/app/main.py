@@ -44,11 +44,13 @@ def create_tables():
         admin = get_user_by_email(db, settings.DEFAULT_ADMIN_EMAIL)
         if not admin:
             from app.crud import create_user  # your 기존 crud 함수 재사용
+            from services.auth_service import hash_password
 
+            hashed = hash_password(settings.DEFAULT_ADMIN_PASSWORD)
             admin = create_user(
                 db,
-                settings.DEFAULT_ADMIN_EMAIL,
-                settings.DEFAULT_ADMIN_PASSWORD,  # 내부에서 해시 처리
+                email=settings.DEFAULT_ADMIN_EMAIL,
+                hashed_password=hashed,  # ← 반드시 해시된 값을 넘겨야 합니다
             )
             print(f"시딩: 기본 관리자 '{settings.DEFAULT_ADMIN_EMAIL}' 생성")
 
