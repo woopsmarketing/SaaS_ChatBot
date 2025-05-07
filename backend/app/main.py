@@ -47,8 +47,8 @@ def create_tables():
 
             admin = create_user(
                 db,
-                email=settings.DEFAULT_ADMIN_EMAIL,
-                password=settings.DEFAULT_ADMIN_PASSWORD,  # 내부에서 해시 처리
+                settings.DEFAULT_ADMIN_EMAIL,
+                settings.DEFAULT_ADMIN_PASSWORD,  # 내부에서 해시 처리
             )
             print(f"시딩: 기본 관리자 '{settings.DEFAULT_ADMIN_EMAIL}' 생성")
 

@@ -22,6 +22,8 @@ def create_user(db: Session, email: str, hashed_password: str) -> User:
     """
     새 사용자 생성
     """
+    # 만약 실제 해시 처리를 여기서 하고 싶다면:
+
     user = User(email=email, password=hashed_password)
     db.add(user)
     db.commit()
