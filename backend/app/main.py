@@ -55,9 +55,8 @@ def create_tables():
         # --- 기본 사이트 (site_key) ---
         if not db.query(Site).filter_by(site_key=settings.DEFAULT_SITE_KEY).first():
             default_site = Site(
-                name="Default Site",
-                site_key=settings.DEFAULT_SITE_KEY,
-                owner_id=admin.id,
+                settings.DEFAULT_SITE_KEY,
+                admin.id,
             )
             db.add(default_site)
             db.commit()
