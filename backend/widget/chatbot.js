@@ -28,6 +28,7 @@ console.log("🐞 chatbot.js loaded");
       try {
         const res = await fetch(`${BACKEND}/chat`, {
           method:  "POST",
+          mode: "cors",      // ← 추가
           headers: { "Content-Type":"application/json" },
           body:    JSON.stringify({ question, site_key: SITE_KEY })
         });
