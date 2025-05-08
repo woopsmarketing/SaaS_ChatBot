@@ -2,7 +2,21 @@
 ;(function(){
   const BACKEND = "https://port-0-saas-chatbot-m9r733wy8c5a422f.sel4.cloudtype.app";
 
-  const SITE_KEY = new URLSearchParams(location.search).get("site_key") || "";
+  // (1) 이 스크립트 태그 자신을 찾기
+  const thisScript = document.currentScript
+                   || document.querySelector('script[src*="widget/init.js"]');
+  if (!thisScript) {
+    console.error("[Chatbot] init.js: script tag not found");
+    return;
+  }
+
+  // ② URL 객체로 parsing 해서 쿼리스트링에서 꺼내기
+  // (2) data-site-key 혹은 query-string에서 site_key 뽑기
+  const dataKey = thisScript.getAttribute("data-site-key");
+  const queryKey = (new URL(thisScript.src)).searchParams.get("site_key");
+  const SITE_KEY = dataKey || queryKey || "";
+  console.log("[Chatbot] INIT script src:", thisScript.src);
+  console.log("[Chatbot] SITE_KEY resolved to:", SITE_KEY);
 
   // ③ 전역에 심어두기
   window.__CHATBOT_BACKEND__  = BACKEND;

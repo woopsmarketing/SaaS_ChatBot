@@ -1,15 +1,20 @@
-// backend/widget/chatbot.js
+// ─── chatbot.js ───────────────────────────────────────────────────────
 console.log("🐞 chatbot.js loaded");
 
 (() => {
-  // init.js 에서 심어놓은 전역 값
+  // 전역에서 꺼낸 값
   const BACKEND  = window.__CHATBOT_BACKEND__  || "";
   const SITE_KEY = window.__CHATBOT_SITE_KEY__ || "";
+  console.log("🐞 CHATBOT INIT:", { BACKEND, SITE_KEY });
 
-  console.log("▶ CHATBOT INIT:", { BACKEND, SITE_KEY });
-
-  // 메시지 붙여넣기 헬퍼…
-  function appendMessage(txt, who) { /* … */ }
+  function appendMessage(txt, who) {
+    const msg = document.createElement("div");
+    msg.className = `msg ${who}`;
+    msg.innerText = txt;
+    const win = document.getElementById("chat-window");
+    win.appendChild(msg);
+    win.scrollTop = win.scrollHeight;
+  }
 
   window.addEventListener("DOMContentLoaded", () => {
     const chatForm  = document.getElementById("chat-form");
@@ -17,7 +22,7 @@ console.log("🐞 chatbot.js loaded");
     if (!chatForm) return;
 
     chatForm.addEventListener("submit", async e => {
-      e.preventDefault();                 // ✅ 새로고침 막기
+      e.preventDefault();           // 새로고침 막기
       const question = chatInput.value.trim();
       if (!question) return;
 
@@ -28,7 +33,6 @@ console.log("🐞 chatbot.js loaded");
       try {
         const res = await fetch(`${BACKEND}/chat`, {
           method:  "POST",
-          mode: "cors",      // ← 추가
           headers: { "Content-Type":"application/json" },
           body:    JSON.stringify({ question, site_key: SITE_KEY })
         });
