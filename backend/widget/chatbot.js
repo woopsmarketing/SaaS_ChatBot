@@ -1,8 +1,7 @@
 console.log("🐞 chatbot.js loaded");
 
 (() => {
-  const params = new URLSearchParams(window.location.search);
-  const SITE_KEY = params.get("site_key") || "";
+  const SITE_KEY = window.__CHATBOT_SITE_KEY__ || "";
   const BACKEND = window.__CHATBOT_BACKEND__ || "";
 
   // 전역 에러 로깅

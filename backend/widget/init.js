@@ -38,7 +38,7 @@
 
   // 5) chatbot.js 스크립트 로드
   const script = document.createElement("script");
-  script.src = `${BACKEND}/widget/chatbot.js?site_key=${SITE_KEY}`;
+  script.src = `${BACKEND}/widget/chatbot.js`;
   script.defer = true;
   document.head.appendChild(script);
 
