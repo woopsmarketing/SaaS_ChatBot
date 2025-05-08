@@ -2,12 +2,7 @@
 ;(function(){
   const BACKEND = "https://port-0-saas-chatbot-m9r733wy8c5a422f.sel4.cloudtype.app";
 
-  // ① 이 스크립트 태그 자신을 찾는다.
-  const thisScript = document.currentScript ||
-    document.querySelector('script[src*="widget/init.js"]');
-
-  // ② URL 객체로 parsing 해서 쿼리스트링에서 꺼내기
-  const SITE_KEY = new URL(thisScript.src).searchParams.get("site_key") || "";
+  const SITE_KEY = new URLSearchParams(location.search).get("site_key") || "";
 
   // ③ 전역에 심어두기
   window.__CHATBOT_BACKEND__  = BACKEND;
