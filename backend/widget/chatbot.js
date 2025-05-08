@@ -1,14 +1,11 @@
-// backend/widget/chatbot.js
 console.log("🐞 chatbot.js loaded");
 
 (() => {
-  // 1) 전역에서 넘겨받은 백엔드/사이트키 혹은 URL 쿼리
-  const BACKEND  = window.__CHATBOT_BACKEND__ || window.location.origin;
-  const SITE_KEY = window.__CHATBOT_SITE_KEY__ || new URLSearchParams(location.search).get("site_key") || "";
+  const params = new URLSearchParams(window.location.search);
+  const SITE_KEY = params.get("site_key") || "";
+  const BACKEND = window.__CHATBOT_BACKEND__ || "";
 
-  console.log("▶ CHATBOT INIT", { BACKEND, SITE_KEY });
-
-  // 2) 전역 에러·Promise 거부 잡기
+  // 전역 에러 로깅
   window.addEventListener("error", e => {
     console.error("Global JS Error:", e.error || e.message, e);
   });
@@ -16,70 +13,56 @@ console.log("🐞 chatbot.js loaded");
     console.error("Unhandled Promise Rejection:", e.reason);
   });
 
-  // 3) 메시지 붙이기 헬퍼
+  console.log("▶ CHATBOT INIT:", { BACKEND, SITE_KEY });
+
+  // 메시지 추가 헬퍼
   function appendMessage(text, sender) {
-    const win = document.getElementById("chat-window");
     const msg = document.createElement("div");
-    msg.className = `msg ${sender}`;
+    msg.className = sender === "user" ? "msg user" : "msg bot";
     msg.innerText = text;
+    const win = document.getElementById("chat-window");
     win.appendChild(msg);
     win.scrollTop = win.scrollHeight;
   }
 
-  // 4) “루트 페이지” vs “iframe 내부” 분기
+  // ─── 토글(최상위 페이지) ─────────────────────────────────
   if (window.self === window.top) {
-    // (생략) init.js 단계에서 이미 DOM 생성/토글 처리했으므로 아무것도 안 해도 됩니다.
-    return;
+    // (여기에 기존의 아이콘/iframe 토글 코드를 두시면 됩니다)
   }
 
-  // ─── IFRAME 내부 로직 ────────────────────────────────────────────────
+  // ─── 폼 이벤트(루트든 iframe 안이든 무조건!) ─────────────────
   window.addEventListener("DOMContentLoaded", () => {
-    const form  = document.getElementById("chat-form");
-    const input = document.getElementById("chat-input");
+    const chatForm  = document.getElementById("chat-form");
+    const chatInput = document.getElementById("chat-input");
+    if (!chatForm || !chatInput) return;  // 위젯이 안 들어온 페이지라면 아무 것도 안 함
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const question = input.value.trim();
+    chatForm.addEventListener("submit", async (e) => {
+      e.preventDefault();  // ★ 페이지 리로드 방지
+      const question = chatInput.value.trim();
       if (!question) return;
 
       appendMessage(question, "user");
-      input.value = "";
+      chatInput.value = "";
 
-      // 5) 실제 호출
-      const url = `${BACKEND}/chat`;
-      console.log("→ POST to Chat API:", url, { question, site_key: SITE_KEY });
-
+      console.log("→ Sending to /chat", { question, site_key: SITE_KEY });
       try {
-        const res = await fetch(url, {
+        const res = await fetch(`${BACKEND}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question, site_key: SITE_KEY })
         });
-
-        // 6) HTTP 에러 처리
         if (!res.ok) {
           const text = await res.text();
           console.error("❌ Chat API Error:", res.status, text);
           appendMessage(`Error ${res.status}: ${text}`, "bot");
           return;
         }
-
-        // 7) JSON 파싱
-        let data;
-        try {
-          data = await res.json();
-        } catch (parseErr) {
-          const raw = await res.text();
-          console.error("❌ JSON parse failed:", parseErr, "raw:", raw);
-          appendMessage("서버 응답 파싱 실패", "bot");
-          return;
-        }
-
-        console.log("← Chat API Response:", data);
+        const data = await res.json();
+        console.log("← Response data:", data);
         appendMessage(data.answer, "bot");
 
-      } catch (networkErr) {
-        console.error("🔥 Fetch failed:", networkErr);
+      } catch (err) {
+        console.error("🔥 Fetch failed:", err);
         appendMessage("네트워크 에러가 발생했습니다.", "bot");
       }
     });
